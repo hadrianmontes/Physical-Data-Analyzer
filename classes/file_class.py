@@ -1,4 +1,5 @@
 import os
+from dataset_class import dataset
 import numpy as np
 class data_file:
     '''
@@ -34,6 +35,9 @@ class data_file:
             self.add_parameter("x",0)
             self.add_parameter("y",1)
 
+        # Create a list to store datasets
+        self.datasets=[]
+
     def read_file(self,filename):
         '''
         This function reads the data from a file and returns a matrix with them'''
@@ -54,3 +58,9 @@ class data_file:
         Adds a key to the dictionary for the parser
         '''
         self.parameters[name]="data[:,"+str(column)+"]"
+
+    def add_dataset(self):
+        '''
+        This function will add a dataset to the file
+        '''
+        self.datasets.append(dataset(self))
