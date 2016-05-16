@@ -6,26 +6,20 @@ class data_file:
     This is a class created for the management of files woth multiple
     datasets to be analysed
     '''
-    # Initialize a global index to count
-    # the nuber of opened files (maybe it is worthless)
-    total_numner_files=0
-
-    def __init__(self,filename,coma_separator=False):
+    def __init__(self,filename,index=0,coma_separator=False):
         '''
         Init function, takes as argument the path to a file (absolute
         or relative) and reads the data
         '''
+        self.path=os.path.abspath(filename)
         # Global index to indentify the file
-        self.global_index=data_file.total_numner_files
-        data_file.total_numner_files+=1
-
+        self.index=index
         self.coma_separator=coma_separator
-
         # Creates an empty dictionary with some keys to be used by a parser
         self.parameters=dict()
 
         # Read the data from the file
-        self.data=self.read_file(filename)
+        self.data=self.read_file()
         self.total_colums=np.shape(self.data)[1]
 
         # Initialice the parameters dictionary with the preset values
@@ -36,13 +30,15 @@ class data_file:
             self.add_parameter("y",1)
 
         # Create a list to store datasets
-        self.datasets=[]
+        self.datasets=dict()
+        self.number_datasets=0
+        self.list_of_keys=[]
 
-    def read_file(self,filename):
+    def read_file(self):
         '''
         This function reads the data from a file and returns a matrix with them'''
         data=[]
-        with open(filename) as f:
+        with open(self.path) as f:
             for l in f:
                 l=l.strip()
                 if self.coma_separator:
@@ -63,4 +59,16 @@ class data_file:
         '''
         This function will add a dataset to the file
         '''
-        self.datasets.append(dataset(self))
+        self.datasets[self.number_datasets]=dataset(self)
+        self.list_of_keys=sorted(self.datasets.keys())
+        self.number_datasets+=1
+
+    def __getitem__(self,index):
+        return self.datasets[index]
+
+    def reload(self):
+        self.data=self.read_file()
+
+    def remove_dataset(self,index):
+        self.datasets.pop(index)
+        self.list_of_keys=sorted(self.datasets.keys())
