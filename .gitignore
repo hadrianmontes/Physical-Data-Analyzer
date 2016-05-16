@@ -1,2 +1,6 @@
 /*/*\~
 /file_tools/test
+*.pyc
+\\#*
+#*
+/#*
