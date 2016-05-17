@@ -6,7 +6,7 @@ class data_file:
     This is a class created for the management of files woth multiple
     datasets to be analysed
     '''
-    def __init__(self,filename,index=0,coma_separator=False):
+    def __init__(self,ldat,filename,index=0,coma_separator=False):
         '''
         Init function, takes as argument the path to a file (absolute
         or relative) and reads the data
@@ -14,6 +14,7 @@ class data_file:
         # Global index to indentify the file
         self.index=index
         self.coma_separator=coma_separator
+        self.list_datafiles=ldat
         # Creates an empty dictionary with some keys to be used by a parser
         self.parameters=dict()
         if filename:
@@ -62,7 +63,7 @@ class data_file:
         '''
         This function will add a dataset to the file
         '''
-        self.datasets[self.number_datasets]=dataset(self)
+        self.datasets[self.number_datasets]=dataset(self.list_datafiles,self.number_datasets,self.index)
         self.list_of_keys=sorted(self.datasets.keys())
         self.number_datasets+=1
 
@@ -100,7 +101,7 @@ class data_file:
             elif l.startswith("DATASET"):
                 key=int(l.split()[1])
                 self.list_of_keys.append(key)
-                self.datasets[key]=dataset(self)
+                self.datasets[key]=dataset(self.list_datafiles,key,self.index)
                 self.number_datasets=max(self.number_datasets,key+1)
             elif l.startswith("END DATAFILE"):
                 break

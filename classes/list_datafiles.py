@@ -11,7 +11,7 @@ class list_datafiles():
         self.list_of_keys=[]
 
     def add_datafile(self,path):
-        self.datafiles[self.number_datafiles]=data_file(path,self.number_datafiles)
+        self.datafiles[self.number_datafiles]=data_file(self,path,self.number_datafiles)
         self.number_datafiles+=1
         self.list_of_keys=sorted(self.datafiles.keys())
 
@@ -35,7 +35,7 @@ class list_datafiles():
             if l.strip().startswith("datafile"):
                 key=int(l.split()[1])
                 self.list_of_keys.append(key)
-                self.datafiles[key]=data_file("",key)
+                self.datafiles[key]=data_file(self,"",key)
                 self.datafiles[key].load(f)
                 self.number_datafiles=max(self.number_datafiles,key+1)
         f.close()
