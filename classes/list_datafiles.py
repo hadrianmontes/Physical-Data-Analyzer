@@ -22,14 +22,14 @@ class list_datafiles():
     def __getitem__(self,index):
         return self.datafiles[index]
 
-    def savefile(self,path):
+    def save(self,path):
         f=open(path,"w")
         for key in self.list_of_keys:
             f.write("datafile "+str(key)+"\n")
             self.datafiles[key].save(f)
         f.close()
 
-    def loadfile(self,path):
+    def load(self,path):
         f=open(path,"r")
         for l in f:
             if l.strip().startswith("datafile"):
