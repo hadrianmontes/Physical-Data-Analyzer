@@ -21,3 +21,23 @@ class list_datafiles():
 
     def __getitem__(self,index):
         return self.datafiles[index]
+
+    def savefile(self,path):
+        f=open(path,"w")
+        for key in self.list_of_keys:
+            f.write("datafile "+str(key)+"\n")
+            self.datafiles[key].save(f)
+        f.close()
+
+    def loadfile(self,path):
+        f=open(path,"r")
+        for l in f:
+            if l.strip().startswith("datafile"):
+                key=int(l.split()[1])
+                self.list_of_keys.append(key)
+                self.datafiles[key]=data_file("",key)
+                self.datafiles[key].load(f)
+                self.number_datafiles=max(self.number_datafiles,key+1)
+        f.close()
+
+        self.list_of_keys=sorted(self.list_of_keys)
