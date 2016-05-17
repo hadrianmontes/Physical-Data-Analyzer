@@ -11,13 +11,16 @@ class data_file:
         Init function, takes as argument the path to a file (absolute
         or relative) and reads the data
         '''
-        self.path=os.path.abspath(filename)
         # Global index to indentify the file
         self.index=index
         self.coma_separator=coma_separator
         # Creates an empty dictionary with some keys to be used by a parser
         self.parameters=dict()
+        if filename:
+            self.initialize_file(filename)
 
+    def initialize_file(self,filename):
+        self.path=os.path.abspath(filename)
         # Read the data from the file
         self.data=self.read_file()
         self.total_colums=np.shape(self.data)[1]
@@ -72,3 +75,41 @@ class data_file:
     def remove_dataset(self,index):
         self.datasets.pop(index)
         self.list_of_keys=sorted(self.datasets.keys())
+
+    def save(self,f):
+        f.write("path ")
+        f.write(self.path+"\n")
+        f.write("BEGIN PARAMETERS\n")
+
+        for parameter in self.parameters:
+            f.write(parameter+"\t"+self.parameters[parameter]+"\n")
+        f.write("END PARAMETERS\n")
+
+        for key in self.list_of_keys:
+            f.write("DATASET "+str(key)+"\n")
+            self.datasets[key].save(f)
+        f.write("END DATAFILE")
+
+    def load(self,f):
+        for l in f:
+            l=l.strip()
+            if l.startswith("path"):
+                self.initialize_file(l[5:])
+            elif l.startswith("BEGIN PARAMETERS"):
+                self.load_parameters(f)
+            elif l.startswith("DATASET"):
+                key=int(l.split()[1])
+                self.list_of_keys.append(key)
+                self.datasets[key]=dataset(self)
+                self.number_datasets=max(self.number_datasets,key+1)
+            elif l.startswith("END DATAFILE"):
+                break
+        self.list_of_keys=sorted(self.datasets.keys())
+
+    def load_parameters(self,f):
+        for l in f:
+            l=l.strip()
+            if l.startswith("END PARAMETERS"):
+                break
+            else:
+                self.parameters[l.split()[0]]=l.split()[1]
