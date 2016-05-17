@@ -21,7 +21,7 @@ def parser(instring,parameters):
             parentesis2[ip2]=joiner(suma,"+")
         parentesis[ip]=joiner(parentesis2,")")
     out=joiner(parentesis,"(")
-    print out
+    return out
 
 def joiner(lista,operand):
     if len(lista)==1:

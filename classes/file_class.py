@@ -89,7 +89,7 @@ class data_file:
         for key in self.list_of_keys:
             f.write("DATASET "+str(key)+"\n")
             self.datasets[key].save(f)
-        f.write("END DATAFILE")
+        f.write("END DATAFILE\n")
 
     def load(self,f):
         for l in f:
@@ -102,6 +102,7 @@ class data_file:
                 key=int(l.split()[1])
                 self.list_of_keys.append(key)
                 self.datasets[key]=dataset(self.list_datafiles,key,self.index)
+                self.datasets[key].load(f)
                 self.number_datasets=max(self.number_datasets,key+1)
             elif l.startswith("END DATAFILE"):
                 break
