@@ -21,7 +21,8 @@ class dataset:
         for variable in self.info:
             lista=self.info[variable]
             if (not lista[2]) and lista[0]:
-                self.info[variable][1]=eval(parser(lista[0],parameters))
+                string=lista[0].replace(" ","")
+                self.info[variable][1]=eval(parser(string,parameters))
 
     def save(self,f):
         for variable in self.info:
