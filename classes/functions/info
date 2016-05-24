@@ -1,0 +1,9 @@
+Function: linear
+Parameters: a,b
+initial_values: 0,0
+string a+b*x
+
+Function: cuadratic
+Parameters: a,b,c
+initial_values: 0,0,0
+string a+b*x+c*x**2
