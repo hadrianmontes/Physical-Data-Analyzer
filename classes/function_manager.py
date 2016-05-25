@@ -6,7 +6,7 @@ import inspect
 class function_manager():
     filename = inspect.getframeinfo(inspect.currentframe()).filename
     instaled_path = os.path.dirname(os.path.abspath(filename))
-    
+
     def __init__(self):
         self.names=[]
         self.funct=dict()
@@ -101,4 +101,3 @@ class function_manager():
 
 if __name__=="__main__":
     manager=function_manager()
-
