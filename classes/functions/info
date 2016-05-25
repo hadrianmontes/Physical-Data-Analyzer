@@ -7,3 +7,10 @@ Function: cuadratic
 Parameters: a,b,c
 initial_values: 0,0,0
 string a+b*x+c*x**2
+
+
+
+Function: exponential_decay
+Parameters: c,tau
+initial_values: 1,1
+string c*np.e**(-tau*x)
