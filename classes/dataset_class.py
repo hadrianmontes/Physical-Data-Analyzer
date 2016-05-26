@@ -1,4 +1,6 @@
 from parser import parser
+from fit import fit
+
 class dataset:
     '''
     This class will define a dataset. THis is a set of data that will
@@ -15,6 +17,16 @@ class dataset:
                    "sy":["",[],False]}
         self.list_datafiles=ldat
 
+        # Create a list to store fits
+        self.fits=dict()
+        self.number_fits=0
+        self.list_of_keys=[]
+
+    def add_fit(self):
+        self.fits[self.number_fits]=fit(self.list_datafiles,self.datafile,self.index,self.number_fits)
+        self.list_of_keys=sorted(self.fits.keys())
+        self.number_fits+=1
+        
     def calculate(self):
         data=self.list_datafiles[self.datafile].data
         parameters=self.list_datafiles[self.datafile].parameters
@@ -51,4 +63,5 @@ if __name__=="__main__":
     a.add_datafile("test")
     a[0].add_dataset()
     a[0][0].info["x"][0]="x"
+    a[0][0].info["y"][0]="x"
     a[0][0].calculate()
