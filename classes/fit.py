@@ -21,6 +21,7 @@ class fit:
 
     def set_fitting_function(self,dictionary):
         self.fitting_function=dictionary
+        self.set_paramaters()
 
     def set_paramaters(self,values=None):
         if not values:
@@ -29,6 +30,7 @@ class fit:
             self.parameters=values
         else:
             return "error"
+        self.parameters=np.array(self.parameters)
 
     def use_uncertainties(self,boolean):
         self.uncertainties=boolean
@@ -38,7 +40,7 @@ class fit:
             return
 
         # Load the values of x and y from de dataset
-        info=self.listadata[self.datafile][self.dataset][self.index].info
+        info=self.listdata[self.datafile_index][self.dataset_index].info
         x=info["x"][1]
         y=info["y"][1]
         sx=info["sx"][1]
