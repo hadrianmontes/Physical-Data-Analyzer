@@ -59,6 +59,9 @@ class data_file:
         '''
         self.parameters[name]="data[:,"+str(column)+"]"
 
+    def add_constant(self,name,value):
+        self.parameters[name]=str(value)
+
     def add_dataset(self):
         '''
         This function will add a dataset to the file

@@ -1,4 +1,7 @@
 from parser import parser
+from fit import fit
+from function_manager import function_manager
+import numpy as np
 class dataset:
     '''
     This class will define a dataset. THis is a set of data that will
@@ -15,13 +18,24 @@ class dataset:
                    "sy":["",[],False]}
         self.list_datafiles=ldat
 
+        # Create a list to store fits
+        self.fits=dict()
+        self.number_fits=0
+        self.list_of_keys=[]
+
+    def add_fit(self):
+        self.fits[self.number_fits]=fit(self.list_datafiles,self.datafile,self.index,self.number_fits)
+        self.list_of_keys=sorted(self.fits.keys())
+        self.number_fits+=1
+        
     def calculate(self):
         data=self.list_datafiles[self.datafile].data
         parameters=self.list_datafiles[self.datafile].parameters
         for variable in self.info:
             lista=self.info[variable]
             if (not lista[2]) and lista[0]:
-                self.info[variable][1]=eval(parser(lista[0],parameters))
+                string=lista[0].replace(" ","")
+                self.info[variable][1]=np.array(eval(parser(string,parameters)).T)[0]
 
     def save(self,f):
         for variable in self.info:
@@ -50,4 +64,11 @@ if __name__=="__main__":
     a.add_datafile("test")
     a[0].add_dataset()
     a[0][0].info["x"][0]="x"
+    a[0][0].info["y"][0]="y"
     a[0][0].calculate()
+    a[0][0].add_fit()
+    b=b=a[0][0].fits[0]
+    c=function_manager()
+    c.load_fits()
+    b.set_fitting_function(c["cuadratic"])
+    b.start_fit()
