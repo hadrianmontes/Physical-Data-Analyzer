@@ -19,6 +19,59 @@ class fit:
         self.errors=[]
         self.uncertainties=False
 
+        # Status of he fit
+        #  0-> not fitted
+        #  1-> fiited and converged
+        # -1-> fitted but not converged
+        self.status=0
+
+    def save(self,f):
+        # Save the function if configured
+        if self.fitting_function:
+            f.write("function "+self.fitting_function["name"]+"\n")
+        # Save the limits of the fit if configured
+        if self.xmax and self.xmin:
+            f.write("xmin "+str(self.xmin)+"\n")
+            f.write("xmax "+str(self.xmax)+"\n")
+
+        if len(self.parameters)!=0:
+            f.write("parameters")
+            for parameter in self.parameters:
+                f.write(" "+str(parameter))
+            f.write("\n")
+            
+        # If using uncertainties, save it
+        if self.uncertainties:
+            f.write("Uncertainties True\n")
+        f.write("END FIT\n")
+
+    def load(self,f):
+        # Initiate an instance of the function manager
+        # to load the used functions
+        manager=function_manager()
+        manager.load_fits()
+
+        for l in f:
+            l=l.strip()
+
+            if l.startswith("function"):
+                self.set_fitting_function(manager[l.split()[1]])
+
+            elif l.startswith("parameters"):
+                self.parameters=np.array([float(i) for i in l.split()[1:]])
+
+            elif l.startswith("xmin"):
+                self.xmin=float(l.split()[1])
+
+            elif l.startswith("xmax"):
+                self.xmax=float(l.split()[1])
+
+            elif l.startswith("Uncertainties"):
+                self.uncertainties=bool(l.split()[1])
+
+            elif l.startswith("END FIT"):
+                break
+
     def set_fitting_function(self,dictionary):
         self.fitting_function=dictionary
         self.set_paramaters()
@@ -57,5 +110,3 @@ class fit:
 
         else:
             self.parameters, self.errors=curve_fit(self.fitting_function["function"],x,y,p0=self.parameters,sigma=sy)
-
-    

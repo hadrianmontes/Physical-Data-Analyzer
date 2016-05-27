@@ -27,7 +27,7 @@ class dataset:
         self.fits[self.number_fits]=fit(self.list_datafiles,self.datafile,self.index,self.number_fits)
         self.list_of_keys=sorted(self.fits.keys())
         self.number_fits+=1
-        
+
     def calculate(self):
         data=self.list_datafiles[self.datafile].data
         parameters=self.list_datafiles[self.datafile].parameters
@@ -40,6 +40,10 @@ class dataset:
     def save(self,f):
         for variable in self.info:
             f.write(variable+" "+self.info[variable][0]+"\n")
+
+        for key in self.list_of_keys:
+            f.write("FIT "+str(key)+"\n")
+            self.fits[key].save(f)
         f.write("END DATASET\n")
 
     def load(self,f):
@@ -47,11 +51,20 @@ class dataset:
             l=l.strip()
             if l.startswith("END DATASET"):
                 break
+            elif l.startswith("FIT"):
+                key=int(l.split()[1])
+                self.list_of_keys.append(key)
+                self.fits[key]=fit(self.list_datafiles,self.datafile,self.index,key)
+                self.fits[key].load(f)
+                self.number_fits=max(self.number_fits,key+1)
+
             else:
                 if len(l.split())>1:
                     variable=l.split()[0]
                     self.info[variable][0]=l[len(variable)+1:]
         self.calculate()
+        for key in self.list_of_keys:
+            self.fits[key].start_fit()
 
     def set_value(self,key,string):
         self.info[key][0]=string
@@ -72,3 +85,4 @@ if __name__=="__main__":
     c.load_fits()
     b.set_fitting_function(c["cuadratic"])
     b.start_fit()
+    a.save("test_4")
