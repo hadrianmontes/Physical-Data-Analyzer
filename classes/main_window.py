@@ -10,7 +10,7 @@ class pda_window(Ui_MainWindow):
     def setupUi(self,MainWindow):
         super(pda_window, self).setupUi(MainWindow)
         self.variable_list.setColumnCount(2)
-
+        self.actionSave.triggered.connect(self.save)
         self.setup_files()
 
     def setup_files(self):
@@ -26,6 +26,9 @@ class pda_window(Ui_MainWindow):
         self.combo_file.clear()
         lista=[self.file_list[i].path for i in self.file_list.list_of_keys]
         self.combo_file.addItems(lista)
+
+    def save(self):
+        print "hola"
 
 if __name__=="__main__":
     import sys
