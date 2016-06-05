@@ -63,6 +63,16 @@
         </item>
         <item row="1" column="0">
          <layout class="QGridLayout" name="variable_grid">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Variable</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" alignment="Qt::AlignLeft">
+           <widget class="QLineEdit" name="parameter_name"/>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_2">
             <property name="maximumSize">
@@ -76,8 +86,38 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0" alignment="Qt::AlignLeft">
-           <widget class="QTableWidget" name="variable_list"/>
+          <item row="1" column="0" colspan="3">
+           <widget class="QTableWidget" name="variable_list">
+            <property name="columnCount">
+             <number>2</number>
+            </property>
+            <column/>
+            <column/>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QPushButton" name="parameter_add">
+            <property name="text">
+             <string>Add/Edit</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Columna</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="parameter_column">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>10</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -129,8 +169,20 @@
      <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionSave"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
