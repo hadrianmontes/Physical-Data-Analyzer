@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scroll_grid = QtGui.QWidget()
-        self.scroll_grid.setGeometry(QtCore.QRect(0, 0, 662, 523))
+        self.scroll_grid.setGeometry(QtCore.QRect(0, 0, 661, 523))
         self.scroll_grid.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.scroll_grid.setObjectName(_fromUtf8("scroll_grid"))
         self.gridLayout_5 = QtGui.QGridLayout(self.scroll_grid)
@@ -119,7 +119,10 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.actionSave = QtGui.QAction(MainWindow)
         self.actionSave.setObjectName(_fromUtf8("actionSave"))
+        self.actionOpen = QtGui.QAction(MainWindow)
+        self.actionOpen.setObjectName(_fromUtf8("actionOpen"))
         self.menuFile.addAction(self.actionSave)
+        self.menuFile.addAction(self.actionOpen)
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -132,13 +135,14 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "Variable", None))
         self.label_2.setText(_translate("MainWindow", "Set Variables", None))
         self.parameter_add.setText(_translate("MainWindow", "Add/Edit", None))
-        self.label_5.setText(_translate("MainWindow", "Columna", None))
+        self.label_5.setText(_translate("MainWindow", "Row(column)", None))
         self.add_button.setText(_translate("MainWindow", "Add", None))
         self.remove_button.setText(_translate("MainWindow", "Delete", None))
         self.main_tabs.setTabText(self.main_tabs.indexOf(self.file_tab), _translate("MainWindow", "Files", None))
         self.main_tabs.setTabText(self.main_tabs.indexOf(self.dataset_tab), _translate("MainWindow", "Data sets", None))
         self.menuFile.setTitle(_translate("MainWindow", "File", None))
         self.actionSave.setText(_translate("MainWindow", "Save", None))
+        self.actionOpen.setText(_translate("MainWindow", "Open", None))
 
 
 if __name__ == "__main__":
