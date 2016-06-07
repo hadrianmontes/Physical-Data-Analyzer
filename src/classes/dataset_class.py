@@ -22,6 +22,10 @@ class dataset:
         self.fits=dict()
         self.number_fits=0
         self.list_of_keys=[]
+        self.label=""
+
+    def set_label(self,string):
+        self.label=string
 
     def add_fit(self):
         self.fits[self.number_fits]=fit(self.list_datafiles,self.datafile,self.index,self.number_fits)
@@ -35,9 +39,10 @@ class dataset:
             lista=self.info[variable]
             if (not lista[2]) and lista[0]:
                 string=lista[0].replace(" ","")
-                self.info[variable][1]=np.array(eval(parser(string,parameters)).T)[0]
+                self.info[variable][1]=np.array(eval(parser(string,parameters)))
 
     def save(self,f):
+        f.write("Label: "+self.label+"\n")
         for variable in self.info:
             f.write(variable+" "+self.info[variable][0]+"\n")
 
@@ -58,6 +63,9 @@ class dataset:
                 self.fits[key].load(f)
                 self.number_fits=max(self.number_fits,key+1)
 
+            elif l.startswith("Label:"):
+                self.label=l[7:]
+
             else:
                 if len(l.split())>1:
                     variable=l.split()[0]
@@ -74,15 +82,15 @@ class dataset:
 if __name__=="__main__":
     from list_datafiles import list_datafiles
     a=list_datafiles()
-    a.add_datafile("test")
+    a.add_datafile("/home/hadrian/Documentos/bitbucket/fenomenos_criticos/data.dat")
     a[0].add_dataset()
     a[0][0].info["x"][0]="x"
     a[0][0].info["y"][0]="y"
     a[0][0].calculate()
-    a[0][0].add_fit()
-    b=b=a[0][0].fits[0]
-    c=function_manager()
-    c.load_fits()
-    b.set_fitting_function(c["cuadratic"])
-    b.start_fit()
-    a.save("test_4")
+    # a[0][0].add_fit()
+    # b=b=a[0][0].fits[0]
+    # c=function_manager()
+    # c.load_fits()
+    # b.set_fitting_function(c["cuadratic"])
+    # b.start_fit()
+

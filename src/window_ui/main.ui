@@ -25,7 +25,7 @@
         <string>Files</string>
        </attribute>
        <layout class="QGridLayout" name="main_file_grid">
-        <item row="1" column="1" colspan="2">
+        <item row="2" column="1" colspan="2">
          <layout class="QGridLayout" name="file_show_grid">
           <item row="0" column="0">
            <widget class="QLabel" name="label">
@@ -45,7 +45,7 @@
                <x>0</x>
                <y>0</y>
                <width>661</width>
-               <height>523</height>
+               <height>500</height>
               </rect>
              </property>
              <property name="layoutDirection">
@@ -61,7 +61,7 @@
           </item>
          </layout>
         </item>
-        <item row="1" column="0">
+        <item row="2" column="0">
          <layout class="QGridLayout" name="variable_grid">
           <item row="2" column="0">
            <widget class="QLabel" name="label_3">
@@ -121,7 +121,7 @@
           </item>
          </layout>
         </item>
-        <item row="0" column="0" colspan="3">
+        <item row="1" column="0" colspan="3">
          <layout class="QHBoxLayout" name="file_choosing_grid">
           <item>
            <widget class="QComboBox" name="combo_file">
@@ -149,12 +149,178 @@
           </item>
          </layout>
         </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Select File</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="dataset_tab">
        <attribute name="title">
         <string>Data sets</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="1" column="0" rowspan="8">
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="1" column="0" alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Dataset Label</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <italic>true</italic>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Dataset Properties</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>X axis</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Y Uncertainties</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Y axis</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>X Uncertainties</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QPushButton" name="data_save">
+            <property name="text">
+             <string>Save/Edit</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QPushButton" name="plot_button">
+            <property name="text">
+             <string>Preview</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" rowspan="7">
+           <widget class="Line" name="line_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="QPushButton" name="reset_plot_preview">
+            <property name="text">
+             <string>Clear Plot</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1" colspan="2">
+           <widget class="QLineEdit" name="sy_data"/>
+          </item>
+          <item row="4" column="1" colspan="2">
+           <widget class="QLineEdit" name="sx_data"/>
+          </item>
+          <item row="3" column="1" colspan="2">
+           <widget class="QLineEdit" name="y_data"/>
+          </item>
+          <item row="2" column="1" colspan="2">
+           <widget class="QLineEdit" name="x_data">
+            <property name="autoFillBackground">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="2">
+           <widget class="QLineEdit" name="label_data">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="1" rowspan="8" colspan="2">
+         <layout class="QGridLayout" name="matplotlib_grid">
+          <item row="0" column="0" alignment="Qt::AlignBottom">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Simple Plot. Its purpouse is only to check the data of the dataset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" alignment="Qt::AlignTop">
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="0" colspan="3">
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="1" column="0" colspan="6" alignment="Qt::AlignTop">
+           <widget class="QComboBox" name="combo_set"/>
+          </item>
+          <item row="1" column="7">
+           <widget class="QPushButton" name="remove_dataset">
+            <property name="text">
+             <string>Remove</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QPushButton" name="add_dataset">
+            <property name="text">
+             <string>Add New</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Select Data set or Create a New One</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
