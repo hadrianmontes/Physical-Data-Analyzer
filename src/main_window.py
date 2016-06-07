@@ -117,7 +117,7 @@ class pda_window(Ui_MainWindow):
         self.data_save.clicked.connect(self.save_dataset)
         self.plot_button.clicked.connect(self.plot_simple_plot_data)
         self.reset_plot_preview.clicked.connect(self.reset_preview)
-
+        self.remove_dataset.clicked.connect(self.remove_data)
         # Connect the combo
         self.combo_set.activated.connect(self.select_data)
 
@@ -136,6 +136,13 @@ class pda_window(Ui_MainWindow):
         self.current_file[last_index].label="New Dataset"
         self.update_combo_data()
         self.combo_set.setCurrentIndex(len(self.current_file.list_of_keys)-1)
+        self.select_data()
+
+    def remove_data(self):
+        """removes a dataset form the list"""
+        data_index=self.current_file.list_of_keys[self.combo_set.currentIndex()]
+        self.current_file.remove_datafile(data_index)
+        self.update_combo_data()
         self.select_data()
 
     def select_data(self):
