@@ -89,16 +89,6 @@ class pda_window(Ui_MainWindow):
             self.variable_list.setItem(row,1,colum)
             row+=1
 
-    def save(self):
-        text=str(QtGui.QFileDialog.getSaveFileName())
-        self.file_list.save(text)
-
-    def load(self):
-        test=str(QtGui.QFileDialog.getOpenFileName())
-        self.file_list.load(test)
-        self.update_combo()
-        self.select_file()
-
     def add_parameter(self):
         self.current_file.add_parameter(str(self.parameter_name.text()),
                                         self.parameter_column.value()-1)
@@ -118,7 +108,22 @@ class pda_window(Ui_MainWindow):
         self.matplotlib_grid.addWidget(self.toolbar_preview,1,0)
         self.matplotlib_grid.addWidget(self.simple_plot_data,2,0,8,1)
         return
-    
+
+    #########
+    # Menus #
+    #########
+
+    def save(self):
+        text=str(QtGui.QFileDialog.getSaveFileName())
+        self.file_list.save(text)
+
+    def load(self):
+        test=str(QtGui.QFileDialog.getOpenFileName())
+        self.file_list.load(test)
+        self.update_combo()
+        self.select_file()
+
+
 # Execution of the main window
 if __name__=="__main__":
     import sys
