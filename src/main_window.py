@@ -87,7 +87,7 @@ class pda_window(Ui_MainWindow):
         row=0
         for parameter in sorted(self.current_file.parameters):
             para=QtGui.QTableWidgetItem(parameter)
-            colum=str(int(self.current_file.parameters[parameter][7:][:-1])+1)
+            colum=str(int(self.current_file.parameters[parameter][16:][:-7])+1)
             colum=QtGui.QTableWidgetItem(colum)
             self.variable_list.setItem(row,0,para)
             self.variable_list.setItem(row,1,colum)
@@ -114,6 +114,9 @@ class pda_window(Ui_MainWindow):
 
         # Connect the buttons
         self.add_dataset.clicked.connect(self.new_dataset)
+        self.data_save.clicked.connect(self.save_dataset)
+        self.plot_button.clicked.connect(self.plot_simple_plot_data)
+        self.reset_plot_preview.clicked.connect(self.reset_preview)
 
         # Connect the combo
         self.combo_set.activated.connect(self.select_data)
@@ -153,6 +156,53 @@ class pda_window(Ui_MainWindow):
         self.y_data.setText(self.current_set.info["y"][0])
         self.sx_data.setText(self.current_set.info["sx"][0])
         self.sy_data.setText(self.current_set.info["sy"][0])
+
+    def save_dataset(self):
+        if not self.current_set:
+            return
+
+        # Save the index to restore the combobox
+        current_index=self.combo_set.currentIndex()
+        
+        self.current_set.label=str(self.label_data.text())
+        x=str(self.x_data.text())
+        if x:
+            self.current_set.info["x"][0]=x
+        y=str(self.y_data.text())
+        if y:
+            self.current_set.info["y"][0]=y
+        sx=str(self.sx_data.text())
+        if sx:
+            self.current_set.info["sx"][0]=sx
+        sy=str(self.sy_data.text())
+        if sy:
+            self.current_set.info["sy"][0]=sy
+        
+        self.update_combo_data()
+        self.combo_set.setCurrentIndex(current_index)
+        self.current_set.calculate()
+        self.select_data()
+
+    def plot_simple_plot_data(self):
+        if not self.current_set:
+            print "No set selected"
+            return
+        self.current_set.calculate()
+        if self.current_set.info["x"][1]!=[]:
+            if self.current_set.info["y"][1]!=[]:
+                x=self.current_set.info["x"][1]
+                y=self.current_set.info["y"][1]
+                self.axes_preview.plot(x,y)
+                self.simple_plot_data.draw()
+            else:
+                print "No values for y"
+        else:
+            print "No values for x"
+
+    def reset_preview(self):
+        self.axes_preview.clear()
+        self.simple_plot_data.draw()
+            
 
     #########
     # Menus #
