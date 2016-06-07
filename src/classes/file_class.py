@@ -118,3 +118,7 @@ class data_file:
                 break
             else:
                 self.parameters[l.split()[0]]=l.split()[1]
+
+    def remove_datafile(self,index):
+        self.datasets.pop(index)
+        self.list_of_keys=sorted(self.datasets.keys())
