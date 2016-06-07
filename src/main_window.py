@@ -70,6 +70,10 @@ class pda_window(Ui_MainWindow):
         # set the max row in the box for parameters
         self.parameter_column.setMaximum(self.current_file.total_colums)
 
+        self.update_combo_data()
+
+        self.select_data()
+
     def remove(self):
         """removes a datafile form the list"""
         file_index=self.file_list.list_of_keys[self.combo_file.currentIndex()]
@@ -107,7 +111,48 @@ class pda_window(Ui_MainWindow):
                                                  self.matplotlib_grid.widget())
         self.matplotlib_grid.addWidget(self.toolbar_preview,1,0)
         self.matplotlib_grid.addWidget(self.simple_plot_data,2,0,8,1)
-        return
+
+        # Connect the buttons
+        self.add_dataset.clicked.connect(self.new_dataset)
+
+        # Connect the combo
+        self.combo_set.activated.connect(self.select_data)
+
+        self.select_data()
+
+    def update_combo_data(self):
+        self.combo_set.clear()
+        self.list_sets=[self.current_file[i].label for i in self.current_file.list_of_keys]
+        self.combo_set.addItems(self.list_sets)
+
+    def new_dataset(self):
+        if not self.current_file:
+            return
+        self.current_file.add_dataset()
+        last_index=self.current_file.list_of_keys[-1]
+        self.current_file[last_index].label="New Dataset"
+        self.update_combo_data()
+        self.combo_set.setCurrentIndex(len(self.current_file.list_of_keys)-1)
+        self.select_data()
+
+    def select_data(self):
+        if not self.current_file:
+            return
+        elif len(self.current_file.list_of_keys)==0:
+            return
+        data_index=self.current_file.list_of_keys[self.combo_set.currentIndex()]
+        self.current_set=self.current_file[data_index]
+        print "Changed to set "+self.current_set.label
+        # Reset the other properties
+        self.current_fit=None
+        self.update_set_parameters()
+
+    def update_set_parameters(self):
+        self.label_data.setText(self.current_set.label)
+        self.x_data.setText(self.current_set.info["x"][0])
+        self.y_data.setText(self.current_set.info["y"][0])
+        self.sx_data.setText(self.current_set.info["sx"][0])
+        self.sy_data.setText(self.current_set.info["sy"][0])
 
     #########
     # Menus #
