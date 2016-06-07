@@ -39,7 +39,7 @@ class dataset:
             lista=self.info[variable]
             if (not lista[2]) and lista[0]:
                 string=lista[0].replace(" ","")
-                self.info[variable][1]=np.array(eval(parser(string,parameters)).T)[0]
+                self.info[variable][1]=np.array(eval(parser(string,parameters)))
 
     def save(self,f):
         f.write("Label: "+self.label+"\n")
@@ -82,15 +82,15 @@ class dataset:
 if __name__=="__main__":
     from list_datafiles import list_datafiles
     a=list_datafiles()
-    a.add_datafile("test")
+    a.add_datafile("/home/hadrian/Documentos/bitbucket/fenomenos_criticos/data.dat")
     a[0].add_dataset()
     a[0][0].info["x"][0]="x"
     a[0][0].info["y"][0]="y"
     a[0][0].calculate()
-    a[0][0].add_fit()
-    b=b=a[0][0].fits[0]
-    c=function_manager()
-    c.load_fits()
-    b.set_fitting_function(c["cuadratic"])
-    b.start_fit()
-    a.save("test_4")
+    # a[0][0].add_fit()
+    # b=b=a[0][0].fits[0]
+    # c=function_manager()
+    # c.load_fits()
+    # b.set_fitting_function(c["cuadratic"])
+    # b.start_fit()
+

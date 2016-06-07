@@ -57,7 +57,7 @@ class data_file:
         '''
         Adds a key to the dictionary for the parser
         '''
-        self.parameters[name]="data[:,"+str(column)+"]"
+        self.parameters[name]="np.array(data[:,"+str(column)+"].T)[0]"
 
     def add_constant(self,name,value):
         self.parameters[name]=str(value)
