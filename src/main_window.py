@@ -1,6 +1,9 @@
 from window_ui.geometry import Ui_MainWindow
 from PyQt4 import QtCore, QtGui
 from classes.list_datafiles import list_datafiles
+from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
 
 class pda_window(Ui_MainWindow):
 
@@ -22,6 +25,7 @@ class pda_window(Ui_MainWindow):
         self.actionSave.triggered.connect(self.save)
         self.actionOpen.triggered.connect(self.load)
         self.setup_files()
+        self.setup_data()
 
 ########################
 # FILE RELATED METHODS #
@@ -100,11 +104,21 @@ class pda_window(Ui_MainWindow):
                                         self.parameter_column.value()-1)
         self.update_variable_list()
 
+    ###################
+    # DATASET METHODS #
+    ###################
 
-###################
-# DATASET METHODS #
-###################
-
+    def setup_data(self):
+        # Prepare the canvas for the plot
+        fig = Figure()
+        self.axes_preview=fig.add_subplot(111)
+        self.simple_plot_data = FigureCanvas(fig)
+        self.toolbar_preview = NavigationToolbar(self.simple_plot_data,
+                                                 self.matplotlib_grid.widget())
+        self.matplotlib_grid.addWidget(self.toolbar_preview,1,0)
+        self.matplotlib_grid.addWidget(self.simple_plot_data,2,0,8,1)
+        return
+    
 # Execution of the main window
 if __name__=="__main__":
     import sys

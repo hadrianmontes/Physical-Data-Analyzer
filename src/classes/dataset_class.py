@@ -22,6 +22,10 @@ class dataset:
         self.fits=dict()
         self.number_fits=0
         self.list_of_keys=[]
+        self.label=""
+
+    def set_label(self,string):
+        self.label=string
 
     def add_fit(self):
         self.fits[self.number_fits]=fit(self.list_datafiles,self.datafile,self.index,self.number_fits)
@@ -38,6 +42,7 @@ class dataset:
                 self.info[variable][1]=np.array(eval(parser(string,parameters)).T)[0]
 
     def save(self,f):
+        f.write("Label: "+self.label+"\n")
         for variable in self.info:
             f.write(variable+" "+self.info[variable][0]+"\n")
 
@@ -57,6 +62,9 @@ class dataset:
                 self.fits[key]=fit(self.list_datafiles,self.datafile,self.index,key)
                 self.fits[key].load(f)
                 self.number_fits=max(self.number_fits,key+1)
+
+            elif l.startswith("Label:"):
+                self.label=l[7:]
 
             else:
                 if len(l.split())>1:
