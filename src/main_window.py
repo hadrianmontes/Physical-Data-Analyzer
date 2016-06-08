@@ -194,7 +194,7 @@ class pda_window(Ui_MainWindow):
         if not self.current_set:
             print "No set selected"
             return
-        self.current_set.calculate()
+        self.save_dataset()
         if self.current_set.info["x"][1]!=[]:
             if self.current_set.info["y"][1]!=[]:
                 x=self.current_set.info["x"][1]
