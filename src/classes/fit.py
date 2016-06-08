@@ -18,6 +18,7 @@ class fit:
         self.parameters=[]
         self.errors=[]
         self.uncertainties=False
+        self.label=""
 
         # Status of he fit
         #  0-> not fitted
@@ -25,8 +26,12 @@ class fit:
         # -1-> fitted but not converged
         self.status=0
 
+    def set_label(self,string):
+        self.label=string
+
     def save(self,f):
         # Save the function if configured
+        f.write("Label: "+self.label+"\n")
         if self.fitting_function:
             f.write("function "+self.fitting_function["name"]+"\n")
         # Save the limits of the fit if configured
@@ -59,6 +64,9 @@ class fit:
 
             elif l.startswith("parameters"):
                 self.parameters=np.array([float(i) for i in l.split()[1:]])
+
+            elif l.startswith("Label:"):
+                self.label=l[7:]
 
             elif l.startswith("xmin"):
                 self.xmin=float(l.split()[1])
