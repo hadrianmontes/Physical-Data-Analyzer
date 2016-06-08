@@ -26,6 +26,7 @@ class pda_window(Ui_MainWindow):
         self.actionOpen.triggered.connect(self.load)
         self.setup_files()
         self.setup_data()
+        self.setup_fit()
 
 ########################
 # FILE RELATED METHODS #
@@ -210,6 +211,20 @@ class pda_window(Ui_MainWindow):
         self.axes_preview.clear()
         self.simple_plot_data.draw()
             
+
+    #######################
+    # Fit related methods #
+    #######################
+
+    def setup_fit(self):
+        # Prepare the canvas for the plot
+        fig = Figure()
+        self.axes_view_fit=fig.add_subplot(111)
+        self.view_fit = FigureCanvas(fig)
+        self.toolbar_view_fit = NavigationToolbar(self.view_fit,
+                                                 self.fit_plot_grid.widget())
+        self.fit_plot_grid.addWidget(self.toolbar_view_fit,2,0)
+        self.fit_plot_grid.addWidget(self.view_fit,3,0,8,1)
 
     #########
     # Menus #
