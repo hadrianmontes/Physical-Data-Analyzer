@@ -79,6 +79,10 @@ class dataset:
         self.info[key][2]=False
         self.calculate()
 
+    def __getitem__(self,index):
+        return self.fits[index]
+
+
 if __name__=="__main__":
     from list_datafiles import list_datafiles
     a=list_datafiles()
