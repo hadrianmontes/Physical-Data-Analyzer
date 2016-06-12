@@ -236,6 +236,7 @@ class pda_window(Ui_MainWindow):
         # Connect the combobox
         self.combo_fit.activated.connect(self.select_fit)
         self.fit_function.addItems(self.function_manager.names)
+        self.fit_function.activated.connect(self.save_fit_parameters)
 
     def update_combo_fit(self):
         self.combo_fit.clear()
@@ -268,11 +269,20 @@ class pda_window(Ui_MainWindow):
             index=self.function_manager.names.index(self.current_fit.fitting_function["name"])
             self.fit_function.setCurrentIndex(index)
 
+            text=self.current_fit.print_parameters()
+            self.param_val.setText(text)
+
     def save_fit_parameters(self):
         self.current_fit.set_label(str(self.fit_label.text()))
+
         fit_index=self.fit_function.currentIndex()
         function=self.function_manager.funct[self.function_manager.names[fit_index]]
         self.current_fit.set_fitting_function(function)
+
+        if self.param_val.text():
+            text=str(self.param_val.text())
+            self.current_fit.save_parameters(text)
+
         current_index=self.combo_fit.currentIndex()
         self.update_combo_fit()
         self.combo_fit.setCurrentIndex(current_index)

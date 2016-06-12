@@ -118,3 +118,20 @@ class fit:
 
         else:
             self.parameters, self.errors=curve_fit(self.fitting_function["function"],x,y,p0=self.parameters,sigma=sy)
+
+    def print_parameters(self):
+        string=""
+
+        for i in range(self.fitting_function["number_parameters"]):
+            string+=self.fitting_function["parameters"][i]+"="+str(self.parameters[i])+", "
+        string=string[:-2]
+        return string
+
+    def save_parameters(self,string):
+        parameters=string.split(",")
+        for parameter in parameters:
+            para,val=parameter.split("=")
+            para=para.strip()
+            val=val.strip()
+            index=self.fitting_function["parameters"].index(para)
+            self.parameters[index]=float(val)
