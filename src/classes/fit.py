@@ -110,10 +110,11 @@ class fit:
         sy=info["sy"][1]
         # select the data in the data range
         if self.xmin and self.xmax:
-            y=y[np.logical_and(x>self.xmin,x>self.xmax)]
-            sy=sy[np.logical_and(x>self.xmin,x>self.xmax)]
-            sx=sx[np.logical_and(x>self.xmin,x>self.xmax)]
-            x=x[np.logical_and(x>self.xmin,x>self.xmax)]
+            y=y[np.logical_and(x>self.xmin,x<self.xmax)]
+            if self.uncertainties:
+                sy=sy[np.logical_and(x>self.xmin,x<self.xmax)]
+                sx=sx[np.logical_and(x>self.xmin,x<self.xmax)]
+            x=x[np.logical_and(x>self.xmin,x<self.xmax)]
         # Do the fits
         if not self.uncertainties:
             self.parameters, self.errors=curve_fit(self.fitting_function["function"],x,y,p0=self.parameters)
