@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from function_manager import function_manager
 import numpy as np
@@ -156,3 +157,15 @@ class fit:
         x=np.linspace(minimun,maximun,100000)
         y=self.fitting_function["function"](x,*self.parameters)
         axis.plot(x,y)
+
+    def set_graphic_range(self):
+        info=self.listdata[self.datafile_index][self.dataset_index].info
+        x=info["x"][1]
+        y=info["y"][1]
+        fig,axis=plt.subplots()
+        axis.plot(x,y)
+        self.xmin,self.xmax=plt.ginput(2)
+        self.xmin=self.xmin[0]
+        self.xmax=self.xmax[0]
+        axis.clear()
+        plt.close(fig)

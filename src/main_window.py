@@ -233,12 +233,19 @@ class pda_window(Ui_MainWindow):
         # connect the buttons
         self.add_fit.clicked.connect(self.new_fit)
         self.save_fit.clicked.connect(self.save_fit_parameters)
+        self.graphic_range.clicked.connect(self.set_graphic_range)
         # Connect the combobox
         self.combo_fit.activated.connect(self.select_fit)
         self.fit_function.addItems(self.function_manager.names)
         self.fit_function.activated.connect(self.save_fit_function)
 
         self.start_fit.clicked.connect(self.start_fitting)
+
+    def set_graphic_range(self):
+        if self.current_fit is None:
+            return
+        self.current_fit.set_graphic_range()
+        self.update_fit_parameters()
 
     def save_fit_function(self):
         self.param_val.setText("")
@@ -283,6 +290,10 @@ class pda_window(Ui_MainWindow):
 
             text=self.current_fit.print_errors()
             self.param_uncert.setText(text)
+        if self.current_fit.xmax is not None:
+            if self.current_fit.xmin is not None:
+                self.min_range.setText(str(self.current_fit.xmin))
+                self.max_range.setText(str(self.current_fit.xmax))
 
     def save_fit_parameters(self):
         self.current_fit.set_label(str(self.fit_label.text()))
