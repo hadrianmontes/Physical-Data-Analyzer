@@ -236,7 +236,14 @@ class pda_window(Ui_MainWindow):
         # Connect the combobox
         self.combo_fit.activated.connect(self.select_fit)
         self.fit_function.addItems(self.function_manager.names)
-        self.fit_function.activated.connect(self.save_fit_parameters)
+        self.fit_function.activated.connect(self.save_fit_function)
+
+        self.start_fit.clicked.connect(self.start_fitting)
+
+    def save_fit_function(self):
+        self.param_val.setText("")
+        self.save_fit_parameters()
+        self.update_fit_parameters()
 
     def update_combo_fit(self):
         self.combo_fit.clear()
@@ -287,6 +294,15 @@ class pda_window(Ui_MainWindow):
         self.update_combo_fit()
         self.combo_fit.setCurrentIndex(current_index)
         self.select_fit()
+
+    def start_fitting(self):
+        if not self.current_fit:
+            return
+        elif self.current_fit.fitting_function is None:
+            return
+
+        self.current_fit.start_fit()
+        self.update_fit_parameters()
 
     #########
     # Menus #
