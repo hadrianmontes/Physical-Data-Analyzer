@@ -1,5 +1,6 @@
 from window_ui.geometry import Ui_MainWindow
-from PyQt4 import QtGui
+from window_ui.manager import Ui_Dialog
+from PyQt4 import QtGui, QtCore
 from classes.list_datafiles import list_datafiles
 from classes.function_manager import function_manager
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
@@ -234,6 +235,7 @@ class pda_window(Ui_MainWindow):
         self.add_fit.clicked.connect(self.new_fit)
         self.save_fit.clicked.connect(self.save_fit_parameters)
         self.graphic_range.clicked.connect(self.set_graphic_range)
+        self.manage_functions.clicked.connect(self.fit_manager)
         # Connect the combobox
         self.combo_fit.activated.connect(self.select_fit)
         self.fit_function.addItems(self.function_manager.names)
@@ -339,6 +341,13 @@ class pda_window(Ui_MainWindow):
         self.axes_view_fit.clear()
         self.current_fit.plot(self.axes_view_fit)
         self.view_fit.draw()
+
+    def fit_manager(self):
+        dialog = QtGui.QDialog()
+        dialog.ui = Ui_Dialog()
+        dialog.ui.setupUi(dialog)
+        dialog.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+        dialog.exec_()
 
     #########
     # Menus #
