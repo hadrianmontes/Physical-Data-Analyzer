@@ -1,6 +1,7 @@
 from window_ui.geometry import Ui_MainWindow
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtGui
 from classes.list_datafiles import list_datafiles
+from classes.function_manager import function_manager
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
@@ -9,6 +10,7 @@ class pda_window(Ui_MainWindow):
 
     def __init__(self):
         self.file_list=list_datafiles()
+        self.function_manager=function_manager()
 
         # Lists for the combobox
         self.list_files=None
@@ -26,6 +28,7 @@ class pda_window(Ui_MainWindow):
         self.actionOpen.triggered.connect(self.load)
         self.setup_files()
         self.setup_data()
+        self.setup_fit()
 
 ########################
 # FILE RELATED METHODS #
@@ -82,7 +85,7 @@ class pda_window(Ui_MainWindow):
         self.select_file()
 
     def update_variable_list(self):
-        ui.variable_list.setRowCount(len(self.current_file.parameters))
+        self.variable_list.setRowCount(len(self.current_file.parameters))
         self.variable_list.clear()
         row=0
         for parameter in sorted(self.current_file.parameters):
@@ -157,6 +160,9 @@ class pda_window(Ui_MainWindow):
         self.current_fit=None
         self.update_set_parameters()
 
+        self.update_combo_fit()
+        self.select_fit()
+
     def update_set_parameters(self):
         self.label_data.setText(self.current_set.label)
         self.x_data.setText(self.current_set.info["x"][0])
@@ -170,7 +176,7 @@ class pda_window(Ui_MainWindow):
 
         # Save the index to restore the combobox
         current_index=self.combo_set.currentIndex()
-        
+
         self.current_set.label=str(self.label_data.text())
         x=str(self.x_data.text())
         if x:
@@ -184,7 +190,7 @@ class pda_window(Ui_MainWindow):
         sy=str(self.sy_data.text())
         if sy:
             self.current_set.info["sy"][0]=sy
-        
+
         self.update_combo_data()
         self.combo_set.setCurrentIndex(current_index)
         self.current_set.calculate()
@@ -194,7 +200,7 @@ class pda_window(Ui_MainWindow):
         if not self.current_set:
             print "No set selected"
             return
-        self.current_set.calculate()
+        self.save_dataset()
         if self.current_set.info["x"][1]!=[]:
             if self.current_set.info["y"][1]!=[]:
                 x=self.current_set.info["x"][1]
@@ -209,7 +215,130 @@ class pda_window(Ui_MainWindow):
     def reset_preview(self):
         self.axes_preview.clear()
         self.simple_plot_data.draw()
-            
+
+    #######################
+    # Fit related methods #
+    #######################
+
+    def setup_fit(self):
+        # Prepare the canvas for the plot
+        fig = Figure()
+        self.axes_view_fit=fig.add_subplot(111)
+        self.view_fit = FigureCanvas(fig)
+        self.toolbar_view_fit = NavigationToolbar(self.view_fit,
+                                                  self.fit_plot_grid.widget())
+        self.fit_plot_grid.addWidget(self.toolbar_view_fit,2,0)
+        self.fit_plot_grid.addWidget(self.view_fit,3,0,8,1)
+
+        # connect the buttons
+        self.add_fit.clicked.connect(self.new_fit)
+        self.save_fit.clicked.connect(self.save_fit_parameters)
+        self.graphic_range.clicked.connect(self.set_graphic_range)
+        # Connect the combobox
+        self.combo_fit.activated.connect(self.select_fit)
+        self.fit_function.addItems(self.function_manager.names)
+        self.fit_function.activated.connect(self.save_fit_function)
+
+        self.start_fit.clicked.connect(self.start_fitting)
+
+    def set_graphic_range(self):
+        if self.current_fit is None:
+            return
+        self.current_fit.set_graphic_range()
+        self.update_fit_parameters()
+
+    def save_fit_function(self):
+        self.param_val.setText("")
+        self.param_uncert.setText("")
+        self.current_fit.errors=[]
+        self.save_fit_parameters()
+        self.update_fit_parameters()
+
+    def update_combo_fit(self):
+        self.combo_fit.clear()
+        self.list_fits=[self.current_set[i].label for i in self.current_set.list_of_keys]
+        self.combo_fit.addItems(self.list_fits)
+
+    def new_fit(self):
+        self.current_set.add_fit()
+        last_index=self.current_set.list_of_keys[-1]
+        self.current_set[last_index].label="New Fit"
+        self.update_combo_fit()
+        self.combo_fit.setCurrentIndex(len(self.current_file.list_of_keys)-1)
+        self.select_fit()
+
+    def select_fit(self):
+        if not self.current_set:
+            return
+        elif len(self.current_set.list_of_keys)==0:
+            return
+        set_index=self.current_set.list_of_keys[self.combo_fit.currentIndex()]
+        self.current_fit=self.current_set[set_index]
+        print "Changed to fit "+self.current_fit.label
+        # Reset the other properties
+        self.update_fit_parameters()
+
+    def update_fit_parameters(self):
+
+        self.fit_label.setText(self.current_fit.label)
+        if self.current_fit.fitting_function is not None:
+            index=self.function_manager.names.index(self.current_fit.fitting_function["name"])
+            self.fit_function.setCurrentIndex(index)
+
+            text=self.current_fit.print_parameters()
+            self.param_val.setText(text)
+
+            text=self.current_fit.print_errors()
+            self.param_uncert.setText(text)
+        if self.current_fit.xmax is not None:
+            if self.current_fit.xmin is not None:
+                self.min_range.setText(str(self.current_fit.xmin))
+                self.max_range.setText(str(self.current_fit.xmax))
+
+        self.check_uncertainties.setChecked(self.current_fit.uncertainties)
+
+    def save_fit_parameters(self):
+        self.current_fit.set_label(str(self.fit_label.text()))
+
+        fit_index=self.fit_function.currentIndex()
+        function=self.function_manager.funct[self.function_manager.names[fit_index]]
+        self.current_fit.set_fitting_function(function)
+
+        if self.param_val.text():
+            text=str(self.param_val.text())
+            self.current_fit.save_parameters(text)
+
+        if str(self.max_range.text())!="":
+            self.current_fit.xmax=float(str(self.max_range.text()))
+        else:
+            self.current_fit.xmax=None
+
+        if str(self.min_range.text())!="":
+            self.current_fit.xmin=float(str(self.min_range.text()))
+        else:
+            self.current_fit.xmin=None
+
+        self.current_fit.use_uncertainties(self.check_uncertainties.isChecked())
+
+        current_index=self.combo_fit.currentIndex()
+        self.update_combo_fit()
+        self.combo_fit.setCurrentIndex(current_index)
+        self.select_fit()
+
+    def start_fitting(self):
+        if not self.current_fit:
+            return
+        elif self.current_fit.fitting_function is None:
+            return
+
+        self.current_fit.start_fit()
+        self.plot_fit()
+        self.update_fit_parameters()
+
+    def plot_fit(self):
+        self.axes_view_fit.clear()
+        self.current_fit.plot(self.axes_view_fit)
+        self.view_fit.draw()
 
     #########
     # Menus #
