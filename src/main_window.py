@@ -242,6 +242,8 @@ class pda_window(Ui_MainWindow):
 
     def save_fit_function(self):
         self.param_val.setText("")
+        self.param_uncert.setText("")
+        self.current_fit.errors=[]
         self.save_fit_parameters()
         self.update_fit_parameters()
 
@@ -279,6 +281,9 @@ class pda_window(Ui_MainWindow):
             text=self.current_fit.print_parameters()
             self.param_val.setText(text)
 
+            text=self.current_fit.print_errors()
+            self.param_uncert.setText(text)
+
     def save_fit_parameters(self):
         self.current_fit.set_label(str(self.fit_label.text()))
 
@@ -302,7 +307,13 @@ class pda_window(Ui_MainWindow):
             return
 
         self.current_fit.start_fit()
+        self.plot_fit()
         self.update_fit_parameters()
+
+    def plot_fit(self):
+        self.axes_view_fit.clear()
+        self.current_fit.plot(self.axes_view_fit)
+        self.view_fit.draw()
 
     #########
     # Menus #

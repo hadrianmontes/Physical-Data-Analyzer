@@ -82,6 +82,7 @@ class fit:
 
     def set_fitting_function(self,dictionary):
         self.fitting_function=dictionary
+        self.erros=[]
         self.set_paramaters()
 
     def set_paramaters(self,values=None):
@@ -118,12 +119,21 @@ class fit:
 
         else:
             self.parameters, self.errors=curve_fit(self.fitting_function["function"],x,y,p0=self.parameters,sigma=sy)
+        self.errors=np.diag(self.errors)**0.5
 
     def print_parameters(self):
         string=""
-
         for i in range(self.fitting_function["number_parameters"]):
             string+=self.fitting_function["parameters"][i]+"="+str(self.parameters[i])+", "
+        string=string[:-2]
+        return string
+
+    def print_errors(self):
+        string=""
+        if self.errors==[]:
+            return string
+        for i in range(self.fitting_function["number_parameters"]):
+            string+=self.fitting_function["parameters"][i]+"="+str(self.errors[i])+", "
         string=string[:-2]
         return string
 
@@ -135,3 +145,14 @@ class fit:
             val=val.strip()
             index=self.fitting_function["parameters"].index(para)
             self.parameters[index]=float(val)
+
+    def plot(self,axis):
+        info=self.listdata[self.datafile_index][self.dataset_index].info
+        x=info["x"][1]
+        y=info["y"][1]
+        axis.plot(x,y)
+        maximun=max(x)
+        minimun=min(x)
+        x=np.linspace(minimun,maximun,100000)
+        y=self.fitting_function["function"](x,*self.parameters)
+        axis.plot(x,y)
