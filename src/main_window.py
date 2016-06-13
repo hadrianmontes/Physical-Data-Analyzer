@@ -295,6 +295,8 @@ class pda_window(Ui_MainWindow):
                 self.min_range.setText(str(self.current_fit.xmin))
                 self.max_range.setText(str(self.current_fit.xmax))
 
+        self.check_uncertainties.setChecked(self.current_fit.uncertainties)
+
     def save_fit_parameters(self):
         self.current_fit.set_label(str(self.fit_label.text()))
 
@@ -305,6 +307,18 @@ class pda_window(Ui_MainWindow):
         if self.param_val.text():
             text=str(self.param_val.text())
             self.current_fit.save_parameters(text)
+
+        if str(self.max_range.text())!="":
+            self.current_fit.xmax=float(str(self.max_range.text()))
+        else:
+            self.current_fit.xmax=None
+
+        if str(self.min_range.text())!="":
+            self.current_fit.xmin=float(str(self.min_range.text()))
+        else:
+            self.current_fit.xmin=None
+
+        self.current_fit.use_uncertainties(self.check_uncertainties.isChecked())
 
         current_index=self.combo_fit.currentIndex()
         self.update_combo_fit()
