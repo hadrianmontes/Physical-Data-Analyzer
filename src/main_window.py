@@ -1,5 +1,5 @@
 from window_ui.geometry import Ui_MainWindow
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtGui
 from classes.list_datafiles import list_datafiles
 from classes.function_manager import function_manager
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
@@ -85,7 +85,7 @@ class pda_window(Ui_MainWindow):
         self.select_file()
 
     def update_variable_list(self):
-        ui.variable_list.setRowCount(len(self.current_file.parameters))
+        self.variable_list.setRowCount(len(self.current_file.parameters))
         self.variable_list.clear()
         row=0
         for parameter in sorted(self.current_file.parameters):
