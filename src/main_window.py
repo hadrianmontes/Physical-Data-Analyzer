@@ -1,5 +1,5 @@
 from window_ui.geometry import Ui_MainWindow
-from window_ui.manager import Ui_Dialog
+from dialog import Dialog
 from PyQt4 import QtGui, QtCore
 from classes.list_datafiles import list_datafiles
 from classes.function_manager import function_manager
@@ -344,7 +344,7 @@ class pda_window(Ui_MainWindow):
 
     def fit_manager(self):
         dialog = QtGui.QDialog()
-        dialog.ui = Ui_Dialog()
+        dialog.ui = Dialog()
         dialog.ui.setupUi(dialog)
         dialog.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         dialog.exec_()
