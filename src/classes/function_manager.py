@@ -90,7 +90,7 @@ class function_manager():
         for i in dictionary["parameters"]:
             f.write(","+i)
         f.write("):\n")
-        f.write("\treturn "+dictionary["string"]+"\n")
+        f.write("    return "+dictionary["string"]+"\n")
         f.close()
 
         reload(functions)
