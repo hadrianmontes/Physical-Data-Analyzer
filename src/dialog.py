@@ -15,6 +15,7 @@ class Dialog(Ui_fitmanager):
         self.update_parameters()
         self.table_values.cellClicked.connect(self.update_spaces)
         self.table_values.cellChanged.connect(self.update_spaces)
+        self.save_button.clicked.connect(self.save_function)
 
     def update_parameters(self):
         self.save_button.setEnabled(False)
@@ -63,3 +64,44 @@ class Dialog(Ui_fitmanager):
         self.save_button.setEnabled(True)
         self.name_val.setText("")
         self.name_val.setEnabled(True)
+
+    def save_function(self):
+        rows=self.table_values.rowCount()
+        parameters=[]
+        initial=[]
+        for i in range(rows):
+            if self.table_values.item(i,0):
+                string=str(self.table_values.item(i,0).text())
+            else:
+                string=""
+
+            if string!="":
+                parameters.append(string)
+#                try:
+                val=float(str(self.table_values.item(i,1).text()))
+#                except:
+                #    val=0
+                initial.append(val)
+
+        function=dict()
+        if str(self.name_val.text())!="":
+            function["name"]=str(self.name_val.text())
+        else:
+            print "No name provided"
+            return
+        if parameters==[]:
+            print "No parameters provided"
+            return
+        else:
+            function["parameters"]=parameters
+            function["initial_values"]=initial
+
+        if str(self.string_val.text())=="":
+            print "No function provided"
+        else:
+            function["string"]=str(self.string_val.text())
+
+        self.function_manager.new_function(function)
+        self.function_manager=function_manager()
+        self.combo_list.clear()
+        self.combo_list.addItems(self.function_manager.names)
