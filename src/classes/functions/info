@@ -14,3 +14,9 @@ Function: exponential_decay
 Parameters: c,tau
 initial_values: 1,1
 string c*np.e**(-tau*x)
+
+Function: cubic
+Parameters: a,b,c,d
+initial_values: 0,0,0,0
+string a+b*x+c*x**2+d*x**3
+

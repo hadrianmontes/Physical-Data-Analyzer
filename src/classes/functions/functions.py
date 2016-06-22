@@ -11,3 +11,6 @@ def cuadratic(x,a,b,c):
 
 def exponential_decay(x,c,tau):
     return c*np.e**(-tau*x)
+
+def cubic(x,a,b,c,d):
+    return a+b*x+c*x**2+d*x**3
