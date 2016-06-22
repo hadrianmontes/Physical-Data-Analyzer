@@ -21,6 +21,7 @@ class Dialog(Ui_fitmanager):
         index=self.combo_list.currentIndex()
         name=self.function_manager.names[index]
         function=self.function_manager[name]
+        self.name_val.setText(name)
         self.table_values.clear()
         self.table_values.setRowCount(function["number_parameters"])
         self.table_values.setHorizontalHeaderLabels(["Parameter","Inital Value"])
@@ -36,6 +37,7 @@ class Dialog(Ui_fitmanager):
         self.table_values.setEnabled(False)
         self.string_val.setText(function["string"])
         self.string_val.setReadOnly(True)
+        self.name_val.setEnabled(False)
         # self.string_val.setEnabled(False)
 
     def update_spaces(self,row,col):
@@ -59,3 +61,5 @@ class Dialog(Ui_fitmanager):
         self.string_val.setReadOnly(False)
         self.string_val.setText("")
         self.save_button.setEnabled(True)
+        self.name_val.setText("")
+        self.name_val.setEnabled(True)
