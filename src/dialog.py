@@ -77,10 +77,10 @@ class Dialog(Ui_fitmanager):
 
             if string!="":
                 parameters.append(string)
-#                try:
-                val=float(str(self.table_values.item(i,1).text()))
-#                except:
-                #    val=0
+                try:
+                    val=float(str(self.table_values.item(i,1).text()))
+                except:
+                    val=0
                 initial.append(val)
 
         function=dict()
@@ -105,3 +105,5 @@ class Dialog(Ui_fitmanager):
         self.function_manager=function_manager()
         self.combo_list.clear()
         self.combo_list.addItems(self.function_manager.names)
+        self.combo_list.setCurrentIndex(len(self.function_manager.names)-1)
+        self.update_parameters()
