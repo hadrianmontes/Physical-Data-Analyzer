@@ -348,6 +348,9 @@ class pda_window(Ui_MainWindow):
         dialog.ui.setupUi(dialog)
         dialog.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         dialog.exec_()
+        self.function_manager=function_manager()
+        self.fit_function.clear()
+        self.fit_function.addItems(self.function_manager.names)
 
     #########
     # Menus #
