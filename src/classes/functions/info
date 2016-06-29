@@ -20,3 +20,14 @@ Parameters: a,b,c,d
 initial_values: 0,0,0,0
 string a+b*x+c*x**2+d*x**3
 
+
+Function: logaritmo
+Parameters: a,b,tau
+initial_values: 1.0,0.0,0.0
+string np.log(a+b*x)+tau
+
+
+Function: potencial
+Parameters: a,b
+initial_values: 1.0,0.0
+string x**a+b
