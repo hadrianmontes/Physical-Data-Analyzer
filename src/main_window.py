@@ -23,6 +23,10 @@ class pda_window(Ui_MainWindow):
         self.current_set=None
         self.current_fit=None
 
+        self.activated_file=False
+        self.activated_set=False
+        self.activated_fit=False
+
     def setupUi(self,MainWindow):
         super(pda_window, self).setupUi(MainWindow)
         self.actionSave.triggered.connect(self.save)
@@ -45,6 +49,14 @@ class pda_window(Ui_MainWindow):
         self.update_combo()
         self.variable_list.setHorizontalHeaderLabels(["Parameter","Row(Column)"])
         self.variable_list.setColumnCount(2)
+        self.toogle_file()
+
+    def toogle_file(self):
+        self.parameter_name.setEnabled(self.activated_file)
+        self.parameter_column.setEnabled(self.activated_file)
+        self.parameter_add.setEnabled(self.activated_file)
+        self.add_dataset.setEnabled(self.activated_file)
+        self.remove_dataset.setEnabled(self.activated_file)
 
     def add_file(self):
         text=str(QtGui.QFileDialog.getOpenFileName())
@@ -68,6 +80,9 @@ class pda_window(Ui_MainWindow):
         # Reset the other properties
         self.current_set=None
         self.current_fit=None
+        self.activated_file=True
+        self.activated_set=False
+        self.activated_fit=False
 
         # Set the parameters
         self.update_variable_list()
@@ -77,6 +92,7 @@ class pda_window(Ui_MainWindow):
         self.update_combo_data()
 
         self.select_data()
+        self.toogle_file()
 
     def remove(self):
         """removes a datafile form the list"""
@@ -126,6 +142,18 @@ class pda_window(Ui_MainWindow):
         self.combo_set.activated.connect(self.select_data)
 
         self.select_data()
+        self.toogle_data()
+
+    def toogle_data(self):
+        self.label_data.setEnabled(self.activated_set)
+        self.x_data.setEnabled(self.activated_set)
+        self.y_data.setEnabled(self.activated_set)
+        self.sx_data.setEnabled(self.activated_set)
+        self.sy_data.setEnabled(self.activated_set)
+        self.data_save.setEnabled(self.activated_set)
+        self.plot_button.setEnabled(self.activated_set)
+        self.add_fit.setEnabled(self.activated_set)
+        self.delete_fit.setEnabled(self.activated_set)
 
     def update_combo_data(self):
         self.combo_set.clear()
@@ -159,8 +187,10 @@ class pda_window(Ui_MainWindow):
         print "Changed to set "+self.current_set.label
         # Reset the other properties
         self.current_fit=None
+        self.activated_set=True
+        self.activated_fit=False
         self.update_set_parameters()
-
+        self.toogle_data()
         self.update_combo_fit()
         self.select_fit()
 
@@ -242,6 +272,19 @@ class pda_window(Ui_MainWindow):
         self.fit_function.activated.connect(self.save_fit_function)
 
         self.start_fit.clicked.connect(self.start_fitting)
+        self.toogle_fit()
+
+    def toogle_fit(self):
+        self.fit_label.setEnabled(self.activated_fit)
+        self.fit_function.setEnabled(self.activated_fit)
+        self.check_uncertainties.setEnabled(self.activated_fit)
+        self.min_range.setEnabled(self.activated_fit)
+        self.max_range.setEnabled(self.activated_fit)
+        self.graphic_range.setEnabled(self.activated_fit)
+        self.param_val.setEnabled(self.activated_fit)
+        self.param_uncert.setEnabled(self.activated_fit)
+        self.save_fit.setEnabled(self.activated_fit)
+        self.start_fit.setEnabled(self.activated_fit)
 
     def set_graphic_range(self):
         if self.current_fit is None:
@@ -279,6 +322,8 @@ class pda_window(Ui_MainWindow):
         print "Changed to fit "+self.current_fit.label
         # Reset the other properties
         self.update_fit_parameters()
+        self.activated_fit=True
+        self.toogle_fit()
 
     def update_fit_parameters(self):
 
